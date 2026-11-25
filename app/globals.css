@@ -1,0 +1,36 @@
+@import 'tailwindcss';
+
+:root {
+  --hq-bg: #4d4d9e;
+  --hq-panel: #383880;
+  --hq-label: #d9e0ff;
+  --hq-muted: #aab0e0;
+  --hq-win: #59ff8c;
+  --hq-hover: #ffd94d;
+  --hq-btn: #f2f2ff;
+  --hq-btn-off: #8c8cb8;
+  --hq-btn-text: #262659;
+}
+
+@theme inline {
+  --color-bg: var(--hq-bg);
+  --color-panel: var(--hq-panel);
+  --color-label: var(--hq-label);
+  --color-muted: var(--hq-muted);
+  --color-win: var(--hq-win);
+  --color-hover: var(--hq-hover);
+  --color-btn: var(--hq-btn);
+  --color-btn-off: var(--hq-btn-off);
+  --color-btn-text: var(--hq-btn-text);
+  --font-sans: var(--font-noto), ui-sans-serif, system-ui, sans-serif;
+}
+
+html,
+body {
+  background: var(--hq-bg);
+  color: var(--hq-label);
+}
+
+svg text {
+  user-select: none;
+}
