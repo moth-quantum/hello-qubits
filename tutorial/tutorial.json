@@ -1,0 +1,817 @@
+{
+  "title": "How qubit values depend on each other",
+  "intro": "Two qubits are described by 15 numbers, called values. You cannot choose them freely: they depend on each other in a few ways that you can learn to see. This tutorial shows those ways one at a time, as puzzles. It follows on from the Hello Qubits puzzles (and the Hello Qiskit puzzles in the Qiskit textbook, especially Level 4 and its Bloch mode).",
+  "chapters": [
+    {
+      "title": "0. The bag of values",
+      "concept": "Each value is a number between -1 and +1 for one way of asking the qubits for an output. For X, Y or Z on one qubit: +1 means certain to output 0, -1 certain to output 1, 0 completely random. For a correlation such as Z1Z2: +1 means the two Z outputs certainly agree, -1 certainly disagree, 0 random. Each combination of letters is called a Pauli word. Two qubits have 15 values, three have 63, n have 4^n - 1. Together they describe the qubits completely. We call them the bag of values.",
+      "puzzles": [
+        {
+          "title": "Fifteen values",
+          "text": "Hello Qubits showed 8 values. Here are all 15: the Y values are back.\n\nEach circle is one value: black is +1, white is -1, grey is 0. The number is shown too. Qubit 1's own values run down the left edge, qubit 2's down the right. Correlations sit where their rows meet.\n\nWarm-up: make X1X2 = +1.",
+          "start": [],
+          "visible": "all",
+          "buttons": [
+            {
+              "label": "h on qubit 1",
+              "gate": "h",
+              "qubit": 1
+            },
+            {
+              "label": "h on qubit 2",
+              "gate": "h",
+              "qubit": 2
+            },
+            {
+              "label": "x on qubit 1",
+              "gate": "x",
+              "qubit": 1
+            }
+          ],
+          "goal": {
+            "XX": 1
+          },
+          "solution": [
+            0,
+            1
+          ],
+          "after": "The h gates moved certainty from the Z values to the X values, a whole row at a time. Everything in this tutorial is about how values move together."
+        }
+      ]
+    },
+    {
+      "title": "1. Discs",
+      "concept": "Two values that anticommute act like a point in a disc of radius 1: their squares add up to at most 1. A gate can turn the point around the disc. The disc has a pole: a third value, the product of the two, which the turn leaves alone. Counting rule: write the two words one above the other, qubit by qubit, and count the qubits where both have a letter (not I) and the letters differ. If the count is odd they anticommute and form a disc; if even, they commute and don't. The pole is the letter-wise product: X times Y is Z, Y times Z is X, Z times X is Y, a letter times itself is I, a letter times I is that letter (up to a sign, which doesn't matter here).",
+      "puzzles": [
+        {
+          "title": "A partial turn",
+          "text": "Gates turn values like a point in a disc. The disc on the right shows the point (X1, Z1).\n\nry(pi/4) turns qubit 1 by an eighth of a turn, from Z1 towards X1.\n\nTurn until X1 = +1.",
+          "start": [],
+          "visible": [
+            "ZI",
+            "XI",
+            "YI"
+          ],
+          "buttons": [
+            {
+              "label": "ry(pi/4) on qubit 1",
+              "gate": "ry",
+              "qubit": 1,
+              "angle_pi": 0.25
+            }
+          ],
+          "discs_pole": "YI",
+          "goal": {
+            "XI": 1
+          },
+          "solution": [
+            0,
+            0
+          ],
+          "after": "Halfway, X1 and Z1 were both 0.707: the certainty was shared. X1 squared plus Z1 squared can never go above 1. The turn left Y1 alone: Y1 is the pole of this disc."
+        },
+        {
+          "title": "The third axis",
+          "text": "Y1 is the third axis. An rx gate turns about the pole X1, so it moves the disc (Z1, Y1) and leaves X1 alone.\n\nMake Y1 = +1.",
+          "start": [],
+          "visible": [
+            "ZI",
+            "XI",
+            "YI"
+          ],
+          "buttons": [
+            {
+              "label": "ry(pi/4) on qubit 1",
+              "gate": "ry",
+              "qubit": 1,
+              "angle_pi": 0.25
+            },
+            {
+              "label": "rx(pi/4) on qubit 1",
+              "gate": "rx",
+              "qubit": 1,
+              "angle_pi": 0.25
+            },
+            {
+              "label": "rx(-pi/4) on qubit 1",
+              "gate": "rx",
+              "qubit": 1,
+              "angle_pi": -0.25
+            }
+          ],
+          "discs_pole": "XI",
+          "goal": {
+            "YI": 1
+          },
+          "solution": [
+            2,
+            2
+          ],
+          "after": "X1, Y1 and Z1 together form a ball: X1 squared plus Y1 squared plus Z1 squared is at most 1. Each pair is a disc, and the third is its pole."
+        },
+        {
+          "title": "Discs everywhere",
+          "text": "Any two values that anticommute form a disc, not just X, Y and Z on one qubit.\n\nCounting rule: line up the two words. Count the qubits where both have a letter and the letters differ. Odd: a disc. Its pole is their product (X times Y is Z, Y times Z is X, Z times X is Y).\n\nHover over each button to see the discs its pole turns, then try them. Press Next when ready.",
+          "start": [
+            {
+              "gate": "h",
+              "qubit": 1
+            }
+          ],
+          "visible": "all",
+          "buttons": [
+            {
+              "label": "turn about Y1",
+              "turn": [
+                {
+                  "pole": "YI",
+                  "angle_pi": 0.25
+                }
+              ]
+            },
+            {
+              "label": "turn about Z1Z2",
+              "turn": [
+                {
+                  "pole": "ZZ",
+                  "angle_pi": 0.25
+                }
+              ]
+            },
+            {
+              "label": "turn about Y1Z2",
+              "turn": [
+                {
+                  "pole": "YZ",
+                  "angle_pi": 0.25
+                }
+              ]
+            },
+            {
+              "label": "turn about X1Y2",
+              "turn": [
+                {
+                  "pole": "XY",
+                  "angle_pi": 0.25
+                }
+              ]
+            }
+          ],
+          "goal": {},
+          "solution": [],
+          "after": "",
+          "notes": "Worked examples of the counting rule. X1 and Z1: they differ on qubit 1, count 1, a disc with pole Y1. Z1Z2 and X1X2: they differ on both qubits, count 2, no disc. X1 and Z1Z2: they differ on qubit 1 only (qubit 2 has a letter in only one word), count 1, a disc with pole Y1Z2. Z1Z2 and Z1X2: qubit 1 has Z and Z (same), qubit 2 has Z and X, count 1, a disc with pole Y2. For two qubits, every value belongs to 4 discs, and there are 20 discs in all."
+        }
+      ]
+    },
+    {
+      "title": "2. One turn moves many discs",
+      "concept": "A turn about a pole turns every disc that has that pole, all at once and by the same angle. A pole on qubit 1 only anticommutes with words that have a letter on qubit 1, so a gate on some qubits can never change a value that only involves other qubits (locality). It can still change correlations that reach the qubits it acts on.",
+      "puzzles": [
+        {
+          "title": "Whole rows",
+          "text": "A turn turns every disc with its pole. ry on qubit 1 has pole Y1, and Y1 is the pole of four discs. Hover over the button to see them.\n\nMake X1 = +1 and X1X2 = +1 at the same time.",
+          "start": [
+            {
+              "gate": "h",
+              "qubit": 2
+            }
+          ],
+          "visible": "all",
+          "buttons": [
+            {
+              "label": "ry(pi/4) on qubit 1",
+              "gate": "ry",
+              "qubit": 1,
+              "angle_pi": 0.25
+            }
+          ],
+          "discs_pole": "YI",
+          "goal": {
+            "XI": 1,
+            "XX": 1
+          },
+          "solution": [
+            0,
+            0
+          ],
+          "after": "Both discs turned together. This is what Hello Qiskit's Bloch mode meant by combining 'whole rows': one gate on qubit 1 turns every value in qubit 1's Z and X rows."
+        },
+        {
+          "title": "Locality",
+          "text": "A turn only moves values that anticommute with its pole. A pole on one qubit only anticommutes with words that have a letter on that qubit.\n\nMake X1 = Z1 = 0.707 and Z2 = -1. Watch which values each button can touch.",
+          "start": [],
+          "visible": "all",
+          "buttons": [
+            {
+              "label": "ry(pi/4) on qubit 1",
+              "gate": "ry",
+              "qubit": 1,
+              "angle_pi": 0.25
+            },
+            {
+              "label": "ry(pi/4) on qubit 2",
+              "gate": "ry",
+              "qubit": 2,
+              "angle_pi": 0.25
+            }
+          ],
+          "goal": {
+            "XI": 0.707,
+            "ZI": 0.707,
+            "IZ": -1
+          },
+          "solution": [
+            0,
+            1,
+            1,
+            1,
+            1
+          ],
+          "after": "Turns on qubit 2 never moved X1 or Z1. But they did move correlations such as Z1Z2 and X1Z2, which reach qubit 2."
+        }
+      ]
+    },
+    {
+      "title": "3. Radius is a budget",
+      "concept": "A disc's point can be anywhere inside it. When it is inside, the missing certainty is elsewhere in the bag. For a pure state (no noise) the squares of all 15 values add up to exactly 3 (for n qubits, 2^n - 1), and turns never change this total. The two values of a disc and its pole also share a budget of 1, so a loud pole squeezes every disc it belongs to. Entanglement is certainty moving from single-qubit values into correlations. A value at +1 or -1 is saturated: it is on the edge of every disc it belongs to.",
+      "puzzles": [
+        {
+          "title": "A loud pole squeezes",
+          "text": "A disc and its pole share one budget: X1 squared plus Y1 squared plus Z1 squared is at most 1.\n\nHere Y1 = 0.707, so the disc (Z1, X1) is squeezed to radius 0.707 (the dashed circle).\n\nTurn the point to X1 = 0.707. Can you get X1 all the way to 1?",
+          "start": [
+            {
+              "gate": "rx",
+              "qubit": 1,
+              "angle_pi": -0.25
+            }
+          ],
+          "visible": [
+            "ZI",
+            "XI",
+            "YI"
+          ],
+          "buttons": [
+            {
+              "label": "ry(pi/4) on qubit 1",
+              "gate": "ry",
+              "qubit": 1,
+              "angle_pi": 0.25
+            }
+          ],
+          "discs_pole": "YI",
+          "goal": {
+            "XI": 0.707,
+            "ZI": 0
+          },
+          "solution": [
+            0,
+            0
+          ],
+          "after": "No: ry turns about Y1, so Y1 stays at 0.707 and keeps the disc small. A loud pole squeezes every disc it belongs to."
+        },
+        {
+          "title": "Entanglement takes the budget",
+          "text": "These qubits are in a Bell state: Z1Z2 = X1X2 = +1, Y1Y2 = -1, and every single-qubit value is 0. The budget (all squares add up to 3) is in the correlations.\n\nMake X1Z2 = +1 and Z1X2 = -1. Keep an eye on the disc (Z1, X1).",
+          "start": [
+            {
+              "gate": "h",
+              "qubit": 1
+            },
+            {
+              "gate": "cx"
+            }
+          ],
+          "visible": "all",
+          "buttons": [
+            {
+              "label": "ry(pi/4) on qubit 1",
+              "gate": "ry",
+              "qubit": 1,
+              "angle_pi": 0.25
+            },
+            {
+              "label": "ry(pi/4) on qubit 2",
+              "gate": "ry",
+              "qubit": 2,
+              "angle_pi": 0.25
+            }
+          ],
+          "discs_pole": "YI",
+          "goal": {
+            "XZ": 1,
+            "ZX": -1
+          },
+          "solution": [
+            0,
+            0
+          ],
+          "after": "The disc (Z1, X1) stayed at its centre: there was nothing in it to turn. The turn moved the whole row, but the certainty was all in the correlation discs. That is what entanglement looks like in the bag."
+        }
+      ]
+    },
+    {
+      "title": "4. Locked twins",
+      "concept": "Values that commute are linked through their product. If a word R has value +1, then for any word P that commutes with R, the values of P and of P times R are equal: they are locked twins (equal and opposite if R = -1). A turn whose pole commutes with R moves both twins in the same way, so the lock is kept. Only a turn whose pole anticommutes with R can loosen it. If R is loud but not at +1, the twins are tied loosely: the closer R is to +1, the tighter the tie. This is one way to make a group of values move as one, for example to share weights between symmetric parts of a neural network whose weights are values in the bag.",
+      "puzzles": [
+        {
+          "title": "Locked twins",
+          "text": "Values that commute are linked through their product. Here Z2 = +1, so X1 and X1Z2 are locked twins (their product is Z2). So are Y1 and Y1Z2, and Z1 and Z1Z2. They are outlined.\n\nTurn qubit 1 however you like: make Y1 = -1, and watch the twins.",
+          "start": [
+            {
+              "gate": "ry",
+              "qubit": 1,
+              "angle_pi": 0.25
+            }
+          ],
+          "visible": "all",
+          "highlight": [
+            "XI",
+            "XZ",
+            "YI",
+            "YZ",
+            "ZI",
+            "ZZ"
+          ],
+          "buttons": [
+            {
+              "label": "ry(-pi/4) on qubit 1",
+              "gate": "ry",
+              "qubit": 1,
+              "angle_pi": -0.25
+            },
+            {
+              "label": "rx(pi/2) on qubit 1",
+              "gate": "rx",
+              "qubit": 1,
+              "angle_pi": 0.5
+            }
+          ],
+          "goal": {
+            "YI": -1
+          },
+          "solution": [
+            0,
+            1
+          ],
+          "after": "Every twin pair stayed equal, whatever you did to qubit 1. A turn whose pole commutes with Z2 moves both twins the same way."
+        },
+        {
+          "title": "Untying",
+          "text": "Only a turn whose pole anticommutes with Z2 can loosen the lock, and that means turning qubit 2.\n\nMake X1Z2 = 0 while keeping X1 = 0.707.",
+          "start": [
+            {
+              "gate": "ry",
+              "qubit": 1,
+              "angle_pi": 0.25
+            }
+          ],
+          "visible": "all",
+          "highlight": [
+            "XI",
+            "XZ",
+            "YI",
+            "YZ",
+            "ZI",
+            "ZZ"
+          ],
+          "buttons": [
+            {
+              "label": "ry(pi/4) on qubit 1",
+              "gate": "ry",
+              "qubit": 1,
+              "angle_pi": 0.25
+            },
+            {
+              "label": "ry(pi/4) on qubit 2",
+              "gate": "ry",
+              "qubit": 2,
+              "angle_pi": 0.25
+            }
+          ],
+          "goal": {
+            "XI": 0.707,
+            "XZ": 0
+          },
+          "solution": [
+            1,
+            1
+          ],
+          "after": "Turning qubit 2 moved Z2 away from +1 and the twins came apart. Halfway, with Z2 = 0.707, they were tied loosely: X1Z2 was 0.707 times X1."
+        }
+      ]
+    },
+    {
+      "title": "5. Discs with correlations as poles",
+      "concept": "Any word can be a pole, including correlations such as Y1Z2. Their discs mix single-qubit values with correlations, so turns about them move certainty between single qubits and correlations. This is how gates create and remove entanglement. The familiar two-qubit gates are made of such turns: cz is a quarter turn about Z1Z2 (backwards) together with quarter turns about Z1 and Z2; cx with qubit 1 as control is the same with Z1X2, Z1 and X2.",
+      "puzzles": [
+        {
+          "title": "Turning entanglement off",
+          "text": "Any word can be a pole. A turn about Y1Z2 turns the discs (Z1Z2, X1) and (X2, Y1Y2), and two more: hover to see them.\n\nStart from the Bell state and make X1 = X2 = +1.",
+          "start": [
+            {
+              "gate": "h",
+              "qubit": 1
+            },
+            {
+              "gate": "cx"
+            }
+          ],
+          "visible": "all",
+          "buttons": [
+            {
+              "label": "turn about Y1Z2",
+              "turn": [
+                {
+                  "pole": "YZ",
+                  "angle_pi": 0.25
+                }
+              ]
+            },
+            {
+              "label": "ry(pi/4) on qubit 1",
+              "gate": "ry",
+              "qubit": 1,
+              "angle_pi": 0.25
+            },
+            {
+              "label": "ry(pi/4) on qubit 2",
+              "gate": "ry",
+              "qubit": 2,
+              "angle_pi": 0.25
+            }
+          ],
+          "discs_pole": "YZ",
+          "goal": {
+            "XI": 1,
+            "IX": 1
+          },
+          "solution": [
+            0,
+            0
+          ],
+          "after": "The certainty moved from correlations into the single qubits: the pair is no longer entangled. X1X2 commutes with the pole, so it stayed at +1."
+        },
+        {
+          "title": "Turning entanglement on",
+          "text": "Start with X1 = Z2 = +1. A turn about Z1X2 has discs (X1, Y1X2) and (Z2, Z1Y2).\n\nMake every single-qubit value 0: aim for Y1X2 = +1 and Z1Y2 = -1.",
+          "start": [
+            {
+              "gate": "h",
+              "qubit": 1
+            }
+          ],
+          "visible": "all",
+          "buttons": [
+            {
+              "label": "turn about Z1X2",
+              "turn": [
+                {
+                  "pole": "ZX",
+                  "angle_pi": 0.25
+                }
+              ]
+            },
+            {
+              "label": "ry(pi/4) on qubit 1",
+              "gate": "ry",
+              "qubit": 1,
+              "angle_pi": 0.25
+            }
+          ],
+          "discs_pole": "ZX",
+          "goal": {
+            "YX": 1,
+            "ZY": -1
+          },
+          "solution": [
+            0,
+            0
+          ],
+          "after": "X1 moved into Y1X2 and Z2 into Z1Y2. X1Z2 commutes with the pole and stayed at +1. Now all of the budget is in correlations: the pair is fully entangled."
+        },
+        {
+          "title": "A cz is three turns",
+          "text": "The cz gate is three quarter turns done together: about Z1Z2 (backwards), about Z1 and about Z2.\n\nUse them to build the cluster state from Hello Qubits: X1Z2 = Z1X2 = +1.",
+          "start": [
+            {
+              "gate": "h",
+              "qubit": 1
+            },
+            {
+              "gate": "h",
+              "qubit": 2
+            }
+          ],
+          "visible": "all",
+          "buttons": [
+            {
+              "label": "quarter turn back about Z1Z2",
+              "turn": [
+                {
+                  "pole": "ZZ",
+                  "angle_pi": -0.5
+                }
+              ]
+            },
+            {
+              "label": "quarter turn about Z1",
+              "turn": [
+                {
+                  "pole": "ZI",
+                  "angle_pi": 0.5
+                }
+              ]
+            },
+            {
+              "label": "quarter turn about Z2",
+              "turn": [
+                {
+                  "pole": "IZ",
+                  "angle_pi": 0.5
+                }
+              ]
+            }
+          ],
+          "goal": {
+            "XZ": 1,
+            "ZX": 1
+          },
+          "solution": [
+            0,
+            1,
+            2
+          ],
+          "after": "The order doesn't matter, because these three poles commute. Every two-qubit gate can be described as turns, some of them about correlation poles."
+        }
+      ]
+    },
+    {
+      "title": "6. Pushes (for designers)",
+      "concept": "This chapter is for people designing learning rules or other methods that treat the values as numbers to adjust. Such methods often ask for a push: make value P a little smaller, and let everything else follow however it must. A push is not a gate. It is what a learning rule asks for, and to carry it out on a device it has to be turned into turns (chapter 7) or done by expensive methods such as quantum imaginary time evolution. Target-based programming (such as the Motte model) works with turns and targets, not pushes. But pushes show clearly how the whole bag is linked. When P is pushed, each value Q moves in proportion to the covariance of P and Q, which is 1/2 <PQ + QP> - <P><Q>. It has three cases. Q is P itself: 1 - P squared (saturation: values near +1 or -1 hardly move). P and Q commute: <PQ> - <P><Q> (twins: if their product is loud, Q follows P). P and Q anticommute: -<P><Q> (discs: they compete for the disc's budget). So turns link anticommuting values, and pushes link commuting values through their products and make anticommuting values compete.",
+      "puzzles": [
+        {
+          "title": "Push and follow",
+          "text": "A push is not a gate. It asks one value to change and lets the rest follow however they must. Hover over a push button: each value shows how strongly it follows (its covariance with the pushed value).\n\nPush X1 down to -0.3.",
+          "start": [
+            {
+              "gate": "ry",
+              "qubit": 1,
+              "angle": 0.9272952180016122
+            },
+            {
+              "gate": "cx"
+            }
+          ],
+          "visible": "all",
+          "buttons": [
+            {
+              "label": "push X1 down",
+              "push": "XI",
+              "sign": 1,
+              "amount": 0.05
+            },
+            {
+              "label": "push X1 up",
+              "push": "XI",
+              "sign": -1,
+              "amount": 0.05
+            }
+          ],
+          "goal": {
+            "XI": -0.3
+          },
+          "solution": [
+            0,
+            0,
+            0
+          ],
+          "after": "At the start, X2 followed at 0.8 of the rate and X1Z2 at 0.6. X1 commutes with both, and their products with X1 (X1X2 = 0.8 and Z2 = 0.6) are loud. For commuting values the covariance is <PQ> - <P><Q>.",
+          "notes": "The start state is sqrt(0.8)|00> + sqrt(0.2)|11>: Z1 = Z2 = 0.6, Z1Z2 = 1, X1X2 = 0.8, Y1Y2 = -0.8, all else 0. X1 is 0 and anticommutes with Z1, so -<X1><Z1> = 0 and Z1 doesn't move at first."
+        },
+        {
+          "title": "Push and compete",
+          "text": "One qubit with X1 = Z1 = 0.707.\n\nPush Z1 up to 0.9 and watch X1.",
+          "start": [
+            {
+              "gate": "ry",
+              "qubit": 1,
+              "angle_pi": 0.25
+            }
+          ],
+          "visible": [
+            "ZI",
+            "XI",
+            "YI"
+          ],
+          "buttons": [
+            {
+              "label": "push Z1 up",
+              "push": "ZI",
+              "sign": -1,
+              "amount": 0.15
+            }
+          ],
+          "discs_pole": "YI",
+          "goal": {
+            "ZI": 0.9
+          },
+          "solution": [
+            0,
+            0,
+            0
+          ],
+          "after": "X1 fell as Z1 rose: anticommuting values compete for their disc's budget (covariance -<P><Q>). Z1 also slowed as it neared +1: that is saturation (covariance 1 - P squared)."
+        }
+      ]
+    },
+    {
+      "title": "7. Getting the change you want",
+      "concept": "Usually you don't want to turn a particular disc: you want some values to change. A small turn by angle theta about a pole G moves any value Q that anticommutes with G by theta times the value of their product (up to sign). So a value can only move through a pole whose product with it is non-zero; if every available pole gives a product of 0, the value is frozen. With a limited set of poles, some changes can be reached exactly, some partly, some not at all. Target-based programming, such as the Motte model, lets you state the values you want (absolute, or relative to the current ones) and leave the others free; the device finds the closest change it can make with the turns it has.",
+      "puzzles": [
+        {
+          "title": "Frozen",
+          "text": "A small turn about a pole moves a value by the value of their product. In a Bell state every single-qubit value is 0, so turns on one qubit have nothing to work with.\n\nMake X1 = 0.707.",
+          "start": [
+            {
+              "gate": "h",
+              "qubit": 1
+            },
+            {
+              "gate": "cx"
+            }
+          ],
+          "visible": "all",
+          "buttons": [
+            {
+              "label": "ry(pi/4) on qubit 1",
+              "gate": "ry",
+              "qubit": 1,
+              "angle_pi": 0.25
+            },
+            {
+              "label": "rx(pi/4) on qubit 1",
+              "gate": "rx",
+              "qubit": 1,
+              "angle_pi": 0.25
+            },
+            {
+              "label": "ry(pi/4) on qubit 2",
+              "gate": "ry",
+              "qubit": 2,
+              "angle_pi": 0.25
+            },
+            {
+              "label": "rx(pi/4) on qubit 2",
+              "gate": "rx",
+              "qubit": 2,
+              "angle_pi": 0.25
+            },
+            {
+              "label": "turn about Y1Z2",
+              "turn": [
+                {
+                  "pole": "YZ",
+                  "angle_pi": 0.25
+                }
+              ]
+            }
+          ],
+          "goal": {
+            "XI": 0.707
+          },
+          "solution": [
+            4
+          ],
+          "after": "Only the turn about Y1Z2 could do it: its product with X1 is Z1Z2, which is +1. Poles on qubit 1 give products that are single-qubit values (all 0 here), and poles on qubit 2 commute with X1."
+        },
+        {
+          "title": "Asking for a change",
+          "text": "Instead of choosing turns, you can state a target and let the device find the turns. Each button asks for X1 to rise by 0.25, leaving every other value free. They differ in which poles the device may use.\n\nReach X1 = 0.5.",
+          "start": [
+            {
+              "gate": "h",
+              "qubit": 1
+            },
+            {
+              "gate": "cx"
+            }
+          ],
+          "visible": "all",
+          "buttons": [
+            {
+              "label": "X1 up 0.25: turns on single qubits",
+              "target": {
+                "XI": 0.25
+              },
+              "poles": [
+                "XI",
+                "YI",
+                "ZI",
+                "IX",
+                "IY",
+                "IZ"
+              ]
+            },
+            {
+              "label": "X1 up 0.25: also Y1Z2",
+              "target": {
+                "XI": 0.25
+              },
+              "poles": [
+                "XI",
+                "YI",
+                "ZI",
+                "IX",
+                "IY",
+                "IZ",
+                "YZ"
+              ]
+            }
+          ],
+          "goal": {
+            "XI": 0.5
+          },
+          "solution": [
+            1,
+            1
+          ],
+          "after": "With single-qubit poles the device could do nothing, because X1 was frozen. With Y1Z2 allowed it found a turn. This is the idea behind target-based quantum programming, such as the Motte model: say what values you want and which turns are allowed, and let the device work out the gates."
+        },
+        {
+          "title": "Sandbox",
+          "text": "All the turns from this tutorial, to play with. Hover over a button to see its discs.\n\nThat's the end of the tutorial. Press Menu to go back.",
+          "start": [],
+          "visible": "all",
+          "buttons": [
+            {
+              "label": "h on qubit 1",
+              "gate": "h",
+              "qubit": 1
+            },
+            {
+              "label": "h on qubit 2",
+              "gate": "h",
+              "qubit": 2
+            },
+            {
+              "label": "ry(pi/4) on qubit 1",
+              "gate": "ry",
+              "qubit": 1,
+              "angle_pi": 0.25
+            },
+            {
+              "label": "ry(pi/4) on qubit 2",
+              "gate": "ry",
+              "qubit": 2,
+              "angle_pi": 0.25
+            },
+            {
+              "label": "rx(pi/4) on qubit 1",
+              "gate": "rx",
+              "qubit": 1,
+              "angle_pi": 0.25
+            },
+            {
+              "label": "rx(pi/4) on qubit 2",
+              "gate": "rx",
+              "qubit": 2,
+              "angle_pi": 0.25
+            },
+            {
+              "label": "turn about Y1Z2",
+              "turn": [
+                {
+                  "pole": "YZ",
+                  "angle_pi": 0.25
+                }
+              ]
+            },
+            {
+              "label": "turn about Z1X2",
+              "turn": [
+                {
+                  "pole": "ZX",
+                  "angle_pi": 0.25
+                }
+              ]
+            },
+            {
+              "label": "cz",
+              "gate": "cz"
+            },
+            {
+              "label": "push X1 down",
+              "push": "XI",
+              "sign": 1,
+              "amount": 0.05
+            }
+          ],
+          "goal": {},
+          "solution": [],
+          "after": ""
+        }
+      ]
+    }
+  ]
+}

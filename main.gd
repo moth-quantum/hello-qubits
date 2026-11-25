@@ -86,6 +86,12 @@ const C_PANEL   := Color(0.22, 0.22, 0.50)
 
 # ── Phase ──────────────────────────────────────────────────────────────────────
 enum Ph { TITLE, PLAY, SUCCESS }
+
+# Title screen choices: the original puzzles, or the interdependency tutorial (tutorial.tscn).
+const TITLE_OPTIONS := [
+	["Puzzles", Rect2(330, 360, 300, 46)],
+	["Interdependency tutorial", Rect2(330, 420, 300, 46)],
+]
 var _ph: Ph = Ph.TITLE
 
 # ── Buttons ────────────────────────────────────────────────────────────────────
@@ -238,7 +244,10 @@ func _btn_enabled(b: Dictionary) -> bool:
 func _input(ev: InputEvent) -> void:
 	if _ph == Ph.TITLE:
 		if ev is InputEventMouseButton and ev.pressed:
-			_load(0)
+			if TITLE_OPTIONS[1][1].has_point(ev.position):
+				get_tree().change_scene_to_file("res://tutorial.tscn")
+			elif TITLE_OPTIONS[0][1].has_point(ev.position):
+				_load(0)
 		return
 
 	if _ph == Ph.SUCCESS:
@@ -431,8 +440,12 @@ func _draw_title() -> void:
 	draw_string(_font, Vector2(cx-190, H/2.0+10),
 		"A two-qubit quantum computing puzzle game",
 		HORIZONTAL_ALIGNMENT_LEFT, -1, 20, C_LBL)
-	draw_string(_font, Vector2(cx-65, H/2.0+60), "Click to start",
-		HORIZONTAL_ALIGNMENT_LEFT, -1, 24, C_WIN)
+	for i in TITLE_OPTIONS.size():
+		var r: Rect2 = TITLE_OPTIONS[i][1]
+		draw_rect(r, C_BTN_ON)
+		var tw := _font.get_string_size(TITLE_OPTIONS[i][0], HORIZONTAL_ALIGNMENT_LEFT, -1, 20).x
+		draw_string(_font, r.position + Vector2((r.size.x - tw) / 2.0, 30), TITLE_OPTIONS[i][0],
+			HORIZONTAL_ALIGNMENT_LEFT, -1, 20, C_BTN_TXT)
 
 func _diamond_pts(center: Vector2, r: float) -> PackedVector2Array:
 	return PackedVector2Array([
